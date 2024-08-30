@@ -18,8 +18,8 @@ using namespace std;
 
 #define FOR(i,a,b) for(ll i=(a);i<=(b);++i)
 #define FOD(i,a,b) for(ll i=(a);i>=(b);--i)
-#define bitUp(i,n) for (;i<=n;i+=i&-i)
-#define bitGet(i) for (;i>0;i-=i&-i)
+#define bitUp(i,n) for(;i<=n;i+=i&-i)
+#define bitGet(i) for(;i>0;i-=i&-i)
 
 #define nooby_speedrun ios_base::sync_with_stdio(0);cin.tie(0),cout.tie(0);
 #define checkIO if(fopen("TEST.INP","r")){freopen("TEST.INP","r",stdin);freopen("TEST.OUT","w",stdout);}
