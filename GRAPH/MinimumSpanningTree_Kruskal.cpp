@@ -45,17 +45,81 @@ const ll dy8[8]={-1,0,1,-1,1,-1,0,1};
 /*----------------------------------------------[ YOU GAY! ]-------------------------------------------*/
 
 
+struct edge
+{
+    ll U;
+    ll V;
+    ll W;
+};
+
+bool cmp(edge a,edge b) { return a.W < b.W; }
+
+
 ll i,j,n,m,k;
+vector<ll> parent(N);
+vector<ll> ranking(N);
+vector<edge> G; 
 
 
 void init()
 {
-
+    cin >> n >> m;
+    FOR (i,1,m)
+    {
+        ll u,v,w; cin >> u >> v >> w;
+        G.pub({u, v, w});
+    }
 }
 
-void solve()
-{
+void Make_set()
+{   
+    FOR (i,1,n) 
+        { parent[i] = i; ranking[i] = 1; }
+}
 
+ll Find(ll V)
+{
+    if (V == parent[V]) return V;
+    return parent[V] = Find(parent[V]);
+}
+
+bool Union(ll a,ll b)
+{
+    a = Find(a); b = Find(b);
+    if (a == b) return false;
+
+    if (ranking[a] < ranking[b]) swap(a, b);
+    parent[b] = a;
+    ranking[a] += ranking[b];
+    return true;
+}
+
+void Kruskal()
+{
+    vector<edge> MST;
+
+    sort(G.begin(), G.end(), cmp);
+
+    ll sum_weight = 0;
+    FOR (i,1,m)
+    {
+        if (sz(MST) == (n - 1)) break;
+
+        edge e = G[i - 1];
+        if (Union(e.U, e.V)) 
+        {
+            MST.pub(e);
+            sum_weight += e.W;
+        }
+    }
+
+    if (sz(MST) != (n - 1)) cout << "Impossible";
+    else
+    {
+        cout << "MST: " << sum_weight << "\n";
+        for (edge e : MST) 
+            cout << e.U << " " << e.V << " " << e.W << "\n";    
+    }
 }
 
 
@@ -68,7 +132,8 @@ int main()
     checkIO 
 
     init();
-    solve();
+    Make_set();
+    Kruskal();
     
     return 0;
 }

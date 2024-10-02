@@ -45,17 +45,61 @@ const ll dy8[8]={-1,0,1,-1,1,-1,0,1};
 /*----------------------------------------------[ YOU GAY! ]-------------------------------------------*/
 
 
+struct edge
+{
+    ll U;
+    ll V;
+    ll W;
+};
+
+
 ll i,j,n,m,k;
+vector<pll> adj[N];
+vector<bool> used(N, false);
 
 
 void init()
 {
-
+    cin >> n >> m;
+    FOR (i,1,m)
+    {
+        ll u,v,w; cin >> u >> v >> w;
+        adj[u].pub({v, w});
+        adj[v].pub({u, w});
+    }
 }
 
-void solve()
+void Prim(ll node)
 {
+    vector<edge> MST;
+    ll sum_weight = 0;
+    used[node] = true;
 
+    while (sz(MST) < (n - 1))
+    {
+        ll min_weight = INF;
+        ll X,Y;
+
+        FOR (U,1,n)
+            if (used[U])
+                for (pll it : adj[U])
+                {
+                    ll V = it.F, W = it.S;
+                    if (!used[V] && W < min_weight)
+                    { 
+                        min_weight = W; 
+                        X = V; Y = U; 
+                    }
+                }
+
+        MST.pub({X, Y, min_weight});
+        sum_weight += min_weight;
+        used[X] = true;
+    }
+
+    cout << sum_weight << "\n";
+    for (edge node : MST)
+        cout << node.U << " " << node.V << " " << node.W << "\n";
 }
 
 
@@ -68,7 +112,7 @@ int main()
     checkIO 
 
     init();
-    solve();
+    Prim(1ll);
     
     return 0;
 }

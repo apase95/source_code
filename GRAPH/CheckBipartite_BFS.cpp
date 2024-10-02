@@ -46,16 +46,53 @@ const ll dy8[8]={-1,0,1,-1,1,-1,0,1};
 
 
 ll i,j,n,m,k;
+vector<ll> adj[N];
+vector<ll> color(N, -1ll);
 
 
 void init()
 {
+    cin >> n >> m;
+    FOR (i,1,m)
+    {
+        ll u,v; cin >> u >> v;
+        adj[u].pub(v);
+        adj[v].pub(u);
+    }
+}
 
+// -1: None Color
+//  0: White color
+//  1: Black color
+
+bool BFS(ll U)
+{
+    queue<ll> Q; 
+    Q.push(U); color[U] = 0ll;
+
+    while (!Q.empty())
+    {
+        ll V = Q.front(); Q.pop();
+        for (ll next : adj[V])
+        {
+            if (color[next] == -1ll) { color[next] = 1ll - color[V]; Q.push(next); }
+            else if (color[next] == color[V]) return false;
+        }
+    }
+
+    return true;
 }
 
 void solve()
-{
+{   
+    bool flag = true;
+    FOR (i,1,n)
+        if (color[i] == -1ll)
+            if (!BFS(i)) 
+                { flag = false; break; }
 
+    if (flag) { cout << "YES\n"; FOR (i,1,n) (color[i] == 0ll) ? cout << i << ": WHITE\n" : cout << i << ": BLACK\n"; }
+    else cout << "NO\n";
 }
 
 

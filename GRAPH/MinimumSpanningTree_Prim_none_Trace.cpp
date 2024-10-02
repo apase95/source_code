@@ -45,17 +45,56 @@ const ll dy8[8]={-1,0,1,-1,1,-1,0,1};
 /*----------------------------------------------[ YOU GAY! ]-------------------------------------------*/
 
 
+struct edge
+{
+    ll U;
+    ll V;
+    ll W;
+};
+
+
 ll i,j,n,m,k;
+vector<pll> adj[N];
+vector<ll> parent(N);
+vector<ll> used(N, false);
 
 
 void init()
 {
-
+    cin >> n >> m;
+    FOR (i,1,m)
+    {
+        ll u,v,w; cin >> u >> v >> w;
+        adj[u].pub({v, w});
+        adj[v].pub({u, w});
+    }
 }
 
-void solve()
+void Prim(ll first_node)
 {
+    ll sum_weight = 0;
 
+    priority_queue <pll, vector<pll>, greater<pll>> PQ;
+    vector<edge> MST; 
+    PQ.push({0ll, first_node});
+
+    while (!PQ.empty())
+    {
+        ll U = PQ.top().S, weight = PQ.top().F; 
+        PQ.pop();
+
+        if (used[U]) continue;
+        sum_weight += weight;
+        used[U] = true;
+
+        for (pll next : adj[U])
+        {
+            ll V = next.F, W = next.S;
+            if (!used[V]) PQ.push({W, V});
+        }
+    }
+
+    cout << sum_weight << "\n";
 }
 
 
@@ -68,7 +107,7 @@ int main()
     checkIO 
 
     init();
-    solve();
+    Prim(1ll);
     
     return 0;
 }
