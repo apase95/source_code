@@ -16,11 +16,6 @@ using namespace std;
 #define LB lower_bound
 #define UB upper_bound
 
-#define all(v) (v).begin(), (v).end()
-#define sz(v) ((v).size())
-#define vll vector<ll>
-#define vvll vector<vll>>
-
 #define FOR(i,a,b) for(ll i=(a);i<=(b);++i)
 #define FOD(i,a,b) for(ll i=(a);i>=(b);--i)
 #define bitUp(i,n) for(;i<=n;i+=i&-i)
@@ -30,36 +25,18 @@ using namespace std;
 #define checkIO if(fopen("TEST.INP","r")){freopen("TEST.INP","r",stdin);freopen("TEST.OUT","w",stdout);}
 
 const ll MOD=1e9+7;
-const ll NMAX=2e5+5;
+const ll NMAX=1e6+5;
 const ll N=5e3+5;
 const ll INF=1e9;
 const ll BASE=31;
 const ll LOG=17;
-
-const ll dx4[4]={-1,0,0,1};
-const ll dy4[4]={0,-1,1,0};
-const ll dx8[8]={-1,-1,-1,0,0,1,1,1};
-const ll dy8[8]={-1,0,1,-1,1,-1,0,1};
 
 
 /*----------------------------------------------[ YOU GAY! ]-------------------------------------------*/
 
 
 ll i,j,n,m,k;
-
-
-void init()
-{
-
-}
-
-void solve()
-{
-
-}
-
-
-/*-----------------------------------------------[ END! ]----------------------------------------------*/
+ll dp[NMAX];
 
 
 int main()
@@ -67,10 +44,19 @@ int main()
     nooby_speedrun
     checkIO 
 
-    init();
-    solve();
+    cin >> n;
+
+    dp[0]=1;
+    FOR(i,1,n)
+    {
+        ll size=min(i,6ll);
+        FOR(j,1,size)
+            if (i>=j)
+                dp[i]=(dp[i]+dp[i-j])%MOD;
+    }
+
     
-    return 0;
+    return cout << dp[n] << "\n",0;
 }
 
 

@@ -16,11 +16,6 @@ using namespace std;
 #define LB lower_bound
 #define UB upper_bound
 
-#define all(v) (v).begin(), (v).end()
-#define sz(v) ((v).size())
-#define vll vector<ll>
-#define vvll vector<vll>>
-
 #define FOR(i,a,b) for(ll i=(a);i<=(b);++i)
 #define FOD(i,a,b) for(ll i=(a);i>=(b);--i)
 #define bitUp(i,n) for(;i<=n;i+=i&-i)
@@ -36,41 +31,45 @@ const ll INF=1e9;
 const ll BASE=31;
 const ll LOG=17;
 
-const ll dx4[4]={-1,0,0,1};
-const ll dy4[4]={0,-1,1,0};
-const ll dx8[8]={-1,-1,-1,0,0,1,1,1};
-const ll dy8[8]={-1,0,1,-1,1,-1,0,1};
-
 
 /*----------------------------------------------[ YOU GAY! ]-------------------------------------------*/
 
 
 ll i,j,n,m,k;
+string s,f;
 
 
-void init()
+vector<ll> KMP(string &S)
 {
+    ll n=S.size();
+    vector<ll> pi(n);
 
+    FOR(i,1,n-1)
+    {
+        ll j=pi[i-1];
+        while(j>0 && s[i]!=s[j]) j=pi[j-1];
+        if (s[i]==s[j]) ++j;
+        pi[i]=j;
+    }
+    return pi;
 }
 
-void solve()
-{
-
-}
-
-
-/*-----------------------------------------------[ END! ]----------------------------------------------*/
 
 
 int main()
 {
     nooby_speedrun
-    checkIO 
+    checkIO
 
-    init();
-    solve();
+    cin >> s >> f;
     
-    return 0;
+    string S=f+'#'+s;
+    vector<ll> mark=KMP(S);
+
+    ll res=0;
+    FOR(i,0,mark.size()-1) if (mark[i]==f.size()) ++res;
+
+    return cout << res,0;
 }
 
 

@@ -16,11 +16,6 @@ using namespace std;
 #define LB lower_bound
 #define UB upper_bound
 
-#define all(v) (v).begin(), (v).end()
-#define sz(v) ((v).size())
-#define vll vector<ll>
-#define vvll vector<vll>>
-
 #define FOR(i,a,b) for(ll i=(a);i<=(b);++i)
 #define FOD(i,a,b) for(ll i=(a);i>=(b);--i)
 #define bitUp(i,n) for(;i<=n;i+=i&-i)
@@ -36,30 +31,12 @@ const ll INF=1e9;
 const ll BASE=31;
 const ll LOG=17;
 
-const ll dx4[4]={-1,0,0,1};
-const ll dy4[4]={0,-1,1,0};
-const ll dx8[8]={-1,-1,-1,0,0,1,1,1};
-const ll dy8[8]={-1,0,1,-1,1,-1,0,1};
-
 
 /*----------------------------------------------[ YOU GAY! ]-------------------------------------------*/
 
 
 ll i,j,n,m,k;
-
-
-void init()
-{
-
-}
-
-void solve()
-{
-
-}
-
-
-/*-----------------------------------------------[ END! ]----------------------------------------------*/
+ll a[N],dp[5*NMAX];
 
 
 int main()
@@ -67,10 +44,15 @@ int main()
     nooby_speedrun
     checkIO 
 
-    init();
-    solve();
-    
-    return 0;
+    cin >> n >> k;
+    FOR(i,1,n) cin >> a[i];
+
+    dp[0]=1;
+    FOR(i,1,n)
+        FOR(j,a[i],k) 
+            dp[j]=(dp[j]+dp[j-a[i]])%MOD;
+
+    return cout << dp[k],0;
 }
 
 
