@@ -16,110 +16,80 @@ using namespace std;
 #define LB lower_bound
 #define UB upper_bound
 
+#define FOR(i,a,b) for(ll i=(a); i<=(b); ++i)
+#define FOD(i,a,b) for(ll i=(a); i>=(b); --i)
+#define bitUp(i,n) for(; i <= n; i += i & -i)
+#define bitGet(i) for(; i > 0 ; i -= i & -i)
+
 #define all(v) (v).begin(), (v).end()
 #define sz(v) ((v).size())
 #define vll vector<ll>
-#define vvll vector<vll>>
-
-#define FOR(i,a,b) for(ll i=(a);i<=(b);++i)
-#define FOD(i,a,b) for(ll i=(a);i>=(b);--i)
-#define bitUp(i,n) for(;i<=n;i+=i&-i)
-#define bitGet(i) for(;i>0;i-=i&-i)
+#define vvll vector<vll>
 
 #define nooby_speedrun ios_base::sync_with_stdio(0);cin.tie(0),cout.tie(0);
 #define checkIO if(fopen("TEST.INP","r")){freopen("TEST.INP","r",stdin);freopen("TEST.OUT","w",stdout);}
 
-const ll MOD=1e9+7;
-const ll NMAX=2e5+5;
-const ll N=5e3+5;
-const ll INF=1e9;
-const ll BASE=31;
-const ll LOG=17;
+const ll MOD = 1e9 + 7;
+const ll INF = 1e9 + 1406;
+const ll BASE = 31;
+const ll LOG = 17;
+const ll NMAX = 2e5 + 9;
+const ll N = 5e3 + 9;
 
-const ll dx4[4]={-1,0,0,1};
-const ll dy4[4]={0,-1,1,0};
-const ll dx8[8]={-1,-1,-1,0,0,1,1,1};
-const ll dy8[8]={-1,0,1,-1,1,-1,0,1};
+const ll dx4[4] = {-1, 0, 0, 1};
+const ll dy4[4] = {0, -1, 1, 0};
+const ll dx8[8] = {-1, -1, -1, 0, 0, 1, 1, 1};
+const ll dy8[8] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
 
 /*----------------------------------------------[ YOU GAY! ]-------------------------------------------*/
 
 
-struct edge
-{
-    ll U;
-    ll V;
-    ll W;
-};
-
-bool cmp(edge a,edge b) { return a.W < b.W; }
-
-
 ll i,j,n,m,k;
-vector<ll> parent(N);
-vector<ll> ranking(N);
-vector<edge> G; 
+vector<ll> adj[N];
+vector<ll> AP; //Articulation Point
+vector<ll> num(N, 0LL), low(N, 0LL); 
+ll cnt = 0;
 
 
 void init()
 {
     cin >> n >> m;
-    FOR (i,1,m)
+    FOR (i, 1, m)
     {
-        ll u,v,w; cin >> u >> v >> w;
-        G.pub({u, v, w});
+        ll u, v; cin >> u >> v;
+        adj[u].pub(v);
+        adj[v].pub(u);
     }
 }
 
-void Make_set()
-{   
-    FOR (i,1,n) 
-        { parent[i] = i; ranking[i] = 1; }
-}
-
-ll Find(ll V)
+void tarjanDFS(ll u, ll parent)
 {
-    if (V == parent[V]) return V;
-    return parent[V] = Find(parent[V]);
-}
+    low[u] = num[u] = ++cnt;
+    ll child = (parent != 0);
 
-bool Union(ll a,ll b)
-{
-    a = Find(a); b = Find(b);
-    if (a == b) return false;
-
-    if (ranking[a] < ranking[b]) swap(a, b);
-    parent[b] = a;
-    ranking[a] += ranking[b];
-    return true;
-}
-
-void Kruskal()
-{
-    vector<edge> MST;
-
-    sort(G.begin(), G.end(), cmp);
-
-    ll sum_weight = 0;
-    FOR (i,1,m)
+    for (ll v : adj[u]) if (v != parent)
     {
-        if (sz(MST) == (n - 1)) break;
-
-        edge e = G[i - 1];
-        if (Union(e.U, e.V)) 
+        if (num[v]) low[u] = min(low[u], num[v]);
+        else
         {
-            MST.pub(e);
-            sum_weight += e.W;
+            tarjanDFS(v, u);
+            low[u] = min(low[u], low[v]);
+            if (low[v] >= num[u]) ++child;
         }
     }
+    if (child >= 2) AP.pub(u);
+}
 
-    if (sz(MST) != (n - 1)) cout << "Impossible";
-    else
-    {
-        cout << "MST: " << sum_weight << "\n";
-        for (edge e : MST) 
-            cout << e.U << " " << e.V << " " << e.W << "\n";    
-    }
+void solve()
+{
+    FOR (i, 1, n)
+        if (!num[i])
+            tarjanDFS(i, 0LL);
+
+    cout << sz(AP) << "\n";
+    for (ll node : AP)
+        cout << node << " ";
 }
 
 
@@ -132,8 +102,7 @@ int main()
     checkIO 
 
     init();
-    Make_set();
-    Kruskal();
+    solve();
     
     return 0;
 }
